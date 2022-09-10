@@ -1,10 +1,14 @@
-import { createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
+import thunk from 'redux-thunk';
 import { rootReducer } from './store';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 
 export default function configureStore() {
-    return createStore(
-        rootReducer,
-        // @ts-ignore
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    );
+  return createStore(
+    rootReducer,
+    composeWithDevTools(applyMiddleware(...[thunk]))
+  );
 }

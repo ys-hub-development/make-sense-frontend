@@ -1,12 +1,12 @@
-import { GeneralActionTypes, GeneralState } from "./types";
-import { Action } from "../Actions";
-import { CustomCursorStyle } from "../../data/enums/CustomCursorStyle";
-import { ViewPointSettings } from "../../settings/ViewPointSettings";
-import { ProjectType } from "../../data/enums/ProjectType";
-import Cookies from "js-cookie";
+import { GeneralActionTypes, GeneralState } from './types';
+import { Action } from '../Actions';
+import { CustomCursorStyle } from '../../data/enums/CustomCursorStyle';
+import { ViewPointSettings } from '../../settings/ViewPointSettings';
+import { ProjectType } from '../../data/enums/ProjectType';
+import Cookies from 'js-cookie';
 
 const initialState: GeneralState = {
-  isAuth: !!Cookies.get("token"),
+  isAuth: !!Cookies.get('token'),
   windowSize: null,
   activePopupType: null,
   customCursorStyle: CustomCursorStyle.DEFAULT,
@@ -17,7 +17,7 @@ const initialState: GeneralState = {
   enablePerClassColoration: true,
   projectData: {
     type: ProjectType.OBJECT_DETECTION,
-    name: "my-project-name",
+    name: 'my-project-name',
   },
   zoom: ViewPointSettings.MIN_ZOOM,
   imageActionType: null,
@@ -85,6 +85,12 @@ export function generalReducer(
       return {
         ...state,
         zoom: action.payload.zoom,
+      };
+    }
+    case Action.UPDATE_IMAGE_ACTION_TYPE: {
+      return {
+        ...state,
+        imageActionType: action.payload.type,
       };
     }
     case Action.UPDATE_ENABLE_PER_CLASS_COLORATION_STATUS: {

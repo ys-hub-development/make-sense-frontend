@@ -1,17 +1,17 @@
 import React from 'react';
-import {connect} from "react-redux";
-import {LabelType} from "../../../../data/enums/LabelType";
-import {ISize} from "../../../../interfaces/ISize";
-import {AppState} from "../../../../store";
-import {ImageData, LabelPoint, LabelRect} from "../../../../store/labels/types";
-import {VirtualList} from "../../../Common/VirtualList/VirtualList";
-import ImagePreview from "../ImagePreview/ImagePreview";
+import {connect} from 'react-redux';
+import {LabelType} from '../../../../data/enums/LabelType';
+import {ISize} from '../../../../interfaces/ISize';
+import {AppState} from '../../../../store';
+import {ImageData, LabelPoint, LabelRect} from '../../../../store/labels/types';
+import {VirtualList} from '../../../Common/VirtualList/VirtualList';
+import ImagePreview from '../ImagePreview/ImagePreview';
 import './ImagesList.scss';
-import {ContextManager} from "../../../../logic/context/ContextManager";
-import {ContextType} from "../../../../data/enums/ContextType";
-import {ImageActions} from "../../../../logic/actions/ImageActions";
-import {EventType} from "../../../../data/enums/EventType";
-import {LabelStatus} from "../../../../data/enums/LabelStatus";
+import {ContextManager} from '../../../../logic/context/ContextManager';
+import {ContextType} from '../../../../data/enums/ContextType';
+import {ImageActions} from '../../../../logic/actions/ImageActions';
+import {EventType} from '../../../../data/enums/EventType';
+import {LabelStatus} from '../../../../data/enums/LabelStatus';
 
 interface IProps {
     activeImageIndex: number;
@@ -80,7 +80,8 @@ class ImagesList extends React.Component<IProps, IState> {
         ImageActions.getImageByIndex(index)
     };
 
-    private renderImagePreview = (index: number, isScrolling: boolean, isVisible: boolean, style: React.CSSProperties) => {
+    private renderImagePreview = (
+      index: number, isScrolling: boolean, isVisible: boolean, style: React.CSSProperties) => {
         return <ImagePreview
             key={index}
             style={style}
@@ -97,7 +98,7 @@ class ImagesList extends React.Component<IProps, IState> {
         const { size } = this.state;
         return(
             <div
-                className="ImagesList"
+                className='ImagesList'
                 ref={ref => this.imagesListRef = ref}
                 onClick={() => ContextManager.switchCtx(ContextType.LEFT_NAVBAR)}
             >

@@ -44,7 +44,7 @@
       animation: backgroundAnimation 10s ease-in-out infinite;
       transform: translate3d(0px, 3px, 0) scaleX(1.04);
       filter: blur(20px);
-      opacity: var(0.7);
+      opacity: .5;
       transition: opacity 0.3s;
     }
   }

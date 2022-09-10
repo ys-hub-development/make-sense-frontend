@@ -1,33 +1,33 @@
-import React from "react";
-import "./Editor.scss";
-import { ISize } from "../../../interfaces/ISize";
-import { ImageData, LabelPoint, LabelRect } from "../../../store/labels/types";
-import { FileUtil } from "../../../utils/FileUtil";
-import { AppState } from "../../../store";
-import { connect } from "react-redux";
-import { updateImageDataById } from "../../../store/labels/actionCreators";
-import { ImageRepository } from "../../../logic/imageRepository/ImageRepository";
-import { LabelType } from "../../../data/enums/LabelType";
-import { PopupWindowType } from "../../../data/enums/PopupWindowType";
-import { CanvasUtil } from "../../../utils/CanvasUtil";
-import { CustomCursorStyle } from "../../../data/enums/CustomCursorStyle";
-import { ImageLoadManager } from "../../../logic/imageRepository/ImageLoadManager";
-import { EventType } from "../../../data/enums/EventType";
-import { EditorData } from "../../../data/EditorData";
-import { EditorModel } from "../../../staticModels/EditorModel";
-import { EditorActions } from "../../../logic/actions/EditorActions";
-import { EditorUtil } from "../../../utils/EditorUtil";
-import { ContextManager } from "../../../logic/context/ContextManager";
-import { ContextType } from "../../../data/enums/ContextType";
-import Scrollbars from "react-custom-scrollbars-2";
-import { ViewPortActions } from "../../../logic/actions/ViewPortActions";
-import { PlatformModel } from "../../../staticModels/PlatformModel";
-import LabelControlPanel from "../LabelControlPanel/LabelControlPanel";
-import { IPoint } from "../../../interfaces/IPoint";
-import { RenderEngineUtil } from "../../../utils/RenderEngineUtil";
-import { LabelStatus } from "../../../data/enums/LabelStatus";
-import { isEqual } from "lodash";
-import { AIActions } from "../../../logic/actions/AIActions";
+import React from 'react';
+import './Editor.scss';
+import { ISize } from '../../../interfaces/ISize';
+import { ImageData, LabelPoint, LabelRect } from '../../../store/labels/types';
+import { FileUtil } from '../../../utils/FileUtil';
+import { AppState } from '../../../store';
+import { connect } from 'react-redux';
+import { updateImageDataById } from '../../../store/labels/actionCreators';
+import { ImageRepository } from '../../../logic/imageRepository/ImageRepository';
+import { LabelType } from '../../../data/enums/LabelType';
+import { PopupWindowType } from '../../../data/enums/PopupWindowType';
+import { CanvasUtil } from '../../../utils/CanvasUtil';
+import { CustomCursorStyle } from '../../../data/enums/CustomCursorStyle';
+import { ImageLoadManager } from '../../../logic/imageRepository/ImageLoadManager';
+import { EventType } from '../../../data/enums/EventType';
+import { EditorData } from '../../../data/EditorData';
+import { EditorModel } from '../../../staticModels/EditorModel';
+import { EditorActions } from '../../../logic/actions/EditorActions';
+import { EditorUtil } from '../../../utils/EditorUtil';
+import { ContextManager } from '../../../logic/context/ContextManager';
+import { ContextType } from '../../../data/enums/ContextType';
+import Scrollbars from 'react-custom-scrollbars-2';
+import { ViewPortActions } from '../../../logic/actions/ViewPortActions';
+import { PlatformModel } from '../../../staticModels/PlatformModel';
+import LabelControlPanel from '../LabelControlPanel/LabelControlPanel';
+import { IPoint } from '../../../interfaces/IPoint';
+import { RenderEngineUtil } from '../../../utils/RenderEngineUtil';
+import { LabelStatus } from '../../../data/enums/LabelStatus';
+import { isEqual } from 'lodash';
+import { AIActions } from '../../../logic/actions/AIActions';
 
 interface IProps {
   size: ISize;
@@ -273,26 +273,25 @@ class Editor extends React.Component<IProps, IState> {
   };
 
   public render() {
-    console.log(this.props);
     return (
       <div
-        className="Editor"
+        className='Editor'
         ref={(ref) => (EditorModel.editor = ref)}
         draggable={false}
       >
         <Scrollbars
           ref={(ref) => (EditorModel.viewPortScrollbars = ref)}
           renderTrackHorizontal={(props) => (
-            <div {...props} className="track-horizontal" />
+            <div {...props} className='track-horizontal' />
           )}
           renderTrackVertical={(props) => (
-            <div {...props} className="track-vertical" />
+            <div {...props} className='track-vertical' />
           )}
           onUpdate={this.onScrollbarsUpdate}
         >
-          <div className="ViewPortContent">
+          <div className='ViewPortContent'>
             <canvas
-              className="ImageCanvas"
+              className='ImageCanvas'
               ref={(ref) => (EditorModel.canvas = ref)}
               draggable={false}
               onContextMenu={(event: React.MouseEvent<HTMLCanvasElement>) =>
@@ -303,7 +302,7 @@ class Editor extends React.Component<IProps, IState> {
           </div>
         </Scrollbars>
         <div
-          className="MousePositionIndicator"
+          className='MousePositionIndicator'
           ref={(ref) => (EditorModel.mousePositionIndicator = ref)}
           draggable={false}
         />
@@ -314,7 +313,7 @@ class Editor extends React.Component<IProps, IState> {
         >
           <img
             draggable={false}
-            alt={"indicator"}
+            alt={'indicator'}
             src={EditorUtil.getIndicator(this.props.customCursorStyle)}
           />
         </div>

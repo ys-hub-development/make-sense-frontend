@@ -7,39 +7,4 @@
     margin-top: 0;
     font-size: 24px;
   }
-
-  .TextButton {
-    box-shadow: $secondaryColor 0 0 0 2px inset; // fallback if new css variables are not supported by browser
-    box-shadow: var(--leading-color) 0 0 0 2px inset;
-    background-color: $secondaryColor; // fallback if new css variables are not supported by browser
-    background-color: var(--leading-color);
-    color: white; // fallback if new css variables are not supported by browser
-    color: var(--button-text-color);
-  }
-
-  .MuiOutlinedInput-root {
-    &:hover .MuiOutlinedInput-notchedOutline {
-      border-color: rgba($color: #fff, $alpha: 0.3) !important;
-    }
-
-    &.Mui-focused .MuiOutlinedInput-notchedOutline {
-      border-color: rgba($color: #fff, $alpha: 0.7) !important;
-    }
-  }
-
-  .MuiOutlinedInput-notchedOutline {
-    border-color: rgba($color: #fff, $alpha: 0.3);
-  }
-
-  input {
-    color: #fff;
-  }
-
-  .MuiInputLabel-root {
-    color: rgba($color: #fff, $alpha: 0.3);
-
-    &.Mui-focused {
-      color: rgba($color: #fff, $alpha: 0.7) !important;
-    }
-  }
 }

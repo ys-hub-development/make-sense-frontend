@@ -1,47 +1,41 @@
-import React from "react";
-import "./LoadMoreImagesPopup.scss";
-import { AppState } from "../../../store";
-import { connect } from "react-redux";
-import {
-  addImageData,
-  updateActiveImageIndex,
-  updateActiveLabelType,
-} from "../../../store/labels/actionCreators";
-import { GenericYesNoPopup } from "../GenericYesNoPopup/GenericYesNoPopup";
-import { useDropzone } from "react-dropzone";
-import { ImageData } from "../../../store/labels/types";
-import { PopupActions } from "../../../logic/actions/PopupActions";
-import { ImageDataUtil } from "../../../utils/ImageDataUtil";
-import { LabelType } from "../../../data/enums/LabelType";
+import React from 'react';
+import './LoadMoreImagesPopup.scss';
+import { AppState } from '../../../store';
+import { connect } from 'react-redux';
+import { addImageData, updateActiveImageIndex } from '../../../store/labels/actionCreators';
+import { GenericYesNoPopup } from '../GenericYesNoPopup/GenericYesNoPopup';
+import { useDropzone } from 'react-dropzone';
+import { ImageData } from '../../../store/labels/types';
+import { PopupActions } from '../../../logic/actions/PopupActions';
+import { ImageDataUtil } from '../../../utils/ImageDataUtil';
 
 interface IProps {
-  addImageData: (imageData: ImageData[]) => any;
-  updateActiveImageIndex: (number) => any;
+  addImage: (imageData: ImageData[]) => void;
+  changeActiveImageIndex: (x: number) => void;
   activeImageIndex: number | null;
-  updateActiveLabelType: (labelType: LabelType) => any;
 }
 
-const LoadMoreImagesPopup: React.FC<IProps> = ({
-  addImageData,
-  activeImageIndex,
-  updateActiveImageIndex,
-  updateActiveLabelType,
-}) => {
+const LoadMoreImagesPopup: React.FC<IProps> = (
+  {
+    addImage,
+    activeImageIndex,
+    changeActiveImageIndex
+  }) => {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     accept: {
-      "image/*": [".jpeg", ".png"],
-    },
+      'image/*': ['.jpeg', '.png']
+    }
   });
 
   const onAccept = () => {
     if (acceptedFiles.length > 0) {
-      addImageData(
+      addImage(
         acceptedFiles.map((fileData: File) =>
           ImageDataUtil.createImageDataFromFileData(fileData)
         )
       );
       if (activeImageIndex === null) {
-        updateActiveImageIndex(0);
+        changeActiveImageIndex(0);
       }
       PopupActions.close();
     }
@@ -56,17 +50,17 @@ const LoadMoreImagesPopup: React.FC<IProps> = ({
       return (
         <>
           <input {...getInputProps()} />
-          <img draggable={false} alt={"upload"} src={"ico/box-opened.png"} />
-          <p className="extraBold">Add new images</p>
+          <img draggable={false} alt={'upload'} src={'ico/box-opened.png'} />
+          <p className='extraBold'>Add new images</p>
           <p>or</p>
-          <p className="extraBold">Click here to select them</p>
+          <p className='extraBold'>Click here to select them</p>
         </>
       );
     else if (acceptedFiles.length === 1)
       return (
         <>
-          <img draggable={false} alt={"uploaded"} src={"ico/box-closed.png"} />
-          <p className="extraBold">1 new image loaded</p>
+          <img draggable={false} alt={'uploaded'} src={'ico/box-closed.png'} />
+          <p className='extraBold'>1 new image loaded</p>
         </>
       );
     else
@@ -75,10 +69,10 @@ const LoadMoreImagesPopup: React.FC<IProps> = ({
           <img
             draggable={false}
             key={1}
-            alt={"uploaded"}
-            src={"ico/box-closed.png"}
+            alt={'uploaded'}
+            src={'ico/box-closed.png'}
           />
-          <p key={2} className="extraBold">
+          <p key={2} className='extraBold'>
             {acceptedFiles.length} new images loaded
           </p>
         </>
@@ -87,8 +81,8 @@ const LoadMoreImagesPopup: React.FC<IProps> = ({
 
   const renderContent = () => {
     return (
-      <div className="LoadMoreImagesPopupContent">
-        <div {...getRootProps({ className: "DropZone" })}>
+      <div className='LoadMoreImagesPopupContent'>
+        <div {...getRootProps({ className: 'DropZone' })}>
           {getDropZoneContent()}
         </div>
       </div>
@@ -97,25 +91,24 @@ const LoadMoreImagesPopup: React.FC<IProps> = ({
 
   return (
     <GenericYesNoPopup
-      title={"Load more images"}
+      title={'Load more images'}
       renderContent={renderContent}
-      acceptLabel={"Load"}
+      acceptLabel={'Load'}
       disableAcceptButton={acceptedFiles.length < 1}
       onAccept={onAccept}
-      rejectLabel={"Cancel"}
+      rejectLabel={'Cancel'}
       onReject={onReject}
     />
   );
 };
 
 const mapDispatchToProps = {
-  addImageData,
-  updateActiveImageIndex,
-  updateActiveLabelType,
+  addImage: addImageData,
+  changeActiveImageIndex: updateActiveImageIndex
 };
 
 const mapStateToProps = (state: AppState) => ({
-  activeImageIndex: state.labels.activeImageIndex,
+  activeImageIndex: state.labels.activeImageIndex
 });
 
 export default connect(

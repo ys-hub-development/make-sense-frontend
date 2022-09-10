@@ -1,67 +1,22 @@
-import axios from "axios";
-import Cookies from "js-cookie";
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { store } from '../index';
+import { updateProjectAuth } from '../store/general/actionCreators';
 
 const httpClient = axios.create({
-  baseURL: "https://make-sens.herokuapp.com",
+  baseURL: 'http://176.96.241.203:8080'
 });
 
-let isRefreshing = false;
-let refreshSubscribers: Function[] = [];
-
-function subscribeTokenRefresh(cb: (token: string) => void) {
-  refreshSubscribers.push(cb);
-}
-
-function onRefreshed(token: string) {
-  refreshSubscribers.map((cb: any) => cb(token));
-  refreshSubscribers = [];
-}
 
 httpClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error && error.response) {
-      const {
-        config,
-        response: { status, data },
-      } = error;
-      const originalRequest = config;
-      const refreshToken: string | undefined | null =
-        Cookies.get("refresh-token");
-
+      const { response: { status } } = error;
       if (status === 401) {
-        if (refreshToken) {
-          if (!isRefreshing) {
-            isRefreshing = true;
-            axios
-              .post("/v1.0/api/account/token-refresh/", {
-                refresh: refreshToken,
-              })
-              .then((res) => {
-                if (res) {
-                  isRefreshing = false;
-                  onRefreshed(res.data.access);
-                  Cookies.set("token", res.data.access);
-                  Cookies.set("refresh-token", res.data.refresh);
-                }
-              })
-              .catch(() => {
-                window.location.replace("/sign-in");
-                isRefreshing = false;
-                return Promise.reject(error);
-              });
-          }
-
-          return new Promise((resolve) => {
-            subscribeTokenRefresh((token: string) => {
-              originalRequest.headers.Authorization = `Bearer ${token}`;
-              resolve(axios(originalRequest));
-            });
-          });
-        }
-        Cookies.remove("token");
-        Cookies.remove("refresh-token");
-        isRefreshing = false;
+        Cookies.remove('token');
+        Cookies.remove('refresh-token');
+        store.dispatch(updateProjectAuth(false));
       } else if (status === 400) {
         return Promise.reject(error);
       } else {
@@ -73,7 +28,7 @@ httpClient.interceptors.response.use(
 );
 
 httpClient.interceptors.request.use((config) => {
-  const token: string | undefined = Cookies.get("token");
+  const token: string | undefined = Cookies.get('token');
 
   if (token) {
     config.headers = { ...config.headers, Authorization: `Bearer ${token}` };

@@ -111,10 +111,8 @@ export const DropDownMenuData: DropDownMenuNode[] = [
         disabled: false,
         getDisabled: (status) => status,
         onClick: () => {
-          store.dispatch(updateActivePopupType(PopupWindowType.IMPORT_IMAGE_FROM_DB));
-          store.dispatch(
-            updateImageActionType('db')
-          );
+          store.dispatch(updateImageActionType('db'));
+          store.dispatch(updateActivePopupType(PopupWindowType.IMPORT_IMAGES));
         }
       },
       {

@@ -1,16 +1,16 @@
-import { ISize } from "../../interfaces/ISize";
-import { Action } from "../Actions";
-import { PopupWindowType } from "../../data/enums/PopupWindowType";
-import { CustomCursorStyle } from "../../data/enums/CustomCursorStyle";
-import { ContextType } from "../../data/enums/ContextType";
-import { ProjectType } from "../../data/enums/ProjectType";
+import { ISize } from '../../interfaces/ISize';
+import { Action } from '../Actions';
+import { PopupWindowType } from '../../data/enums/PopupWindowType';
+import { CustomCursorStyle } from '../../data/enums/CustomCursorStyle';
+import { ContextType } from '../../data/enums/ContextType';
+import { ProjectType } from '../../data/enums/ProjectType';
 
 export type ProjectData = {
   type: ProjectType;
   name: string;
 };
 
-export type ImageActionType = "db" | "local";
+export type ImageActionType = 'db' | 'local';
 
 export type GeneralState = {
   windowSize: ISize;

@@ -13,62 +13,62 @@ import { CSSHelper } from '../../logic/helpers/CSSHelper';
 import { ClipLoader } from 'react-spinners';
 import ImportLabelPopup from './ImportLabelPopup/ImportLabelPopup';
 import ExportLabelPopup from './ExportLabelsPopup/ExportLabelPopup';
-import LoadImageFromDB from './LoadImageFromDBPopup/LoadImageFromDBPopup';
+import DirectoryPopup from './DirectoryPopup/DirectoryPopup';
 
 interface IProps {
-    activePopupType: PopupWindowType;
+  activePopupType: PopupWindowType;
 }
 
 const PopupView: React.FC<IProps> = ({ activePopupType }) => {
 
-    const selectPopup = () => {
-        switch (activePopupType) {
-            case PopupWindowType.LOAD_LABEL_NAMES:
-                return <LoadLabelsPopup />;
-            case PopupWindowType.EXPORT_ANNOTATIONS:
-                return <ExportLabelPopup />;
-            case PopupWindowType.IMPORT_ANNOTATIONS:
-                return <ImportLabelPopup />;
-            case PopupWindowType.INSERT_LABEL_NAMES:
-                return <InsertLabelNamesPopup
-                    isUpdate={false}
-                />;
-            case PopupWindowType.UPDATE_LABEL:
-                return <InsertLabelNamesPopup
-                    isUpdate={true}
-                />;
-            case PopupWindowType.EXIT_PROJECT:
-                return <ExitProjectPopup />;
-            case PopupWindowType.IMPORT_IMAGES:
-                return <LoadMoreImagesPopup />;
-            case PopupWindowType.LOAD_AI_MODEL:
-                return <LoadModelPopup />;
-            case PopupWindowType.SUGGEST_LABEL_NAMES:
-                return <SuggestLabelNamesPopup />;
-            case PopupWindowType.IMPORT_IMAGE_FROM_DB:
-                return <LoadImageFromDB />;
-            case PopupWindowType.LOADER:
-                return <ClipLoader
-                    size={50}
-                    color={CSSHelper.getLeadingColor()}
-                    loading={true}
-                />;
-            default:
-                return null;
-        }
-    };
+  const selectPopup = () => {
+    switch (activePopupType) {
+      case PopupWindowType.LOAD_LABEL_NAMES:
+        return <LoadLabelsPopup />;
+      case PopupWindowType.EXPORT_ANNOTATIONS:
+        return <ExportLabelPopup />;
+      case PopupWindowType.IMPORT_ANNOTATIONS:
+        return <ImportLabelPopup />;
+      case PopupWindowType.INSERT_LABEL_NAMES:
+        return <InsertLabelNamesPopup
+          isUpdate={false}
+        />;
+      case PopupWindowType.UPDATE_LABEL:
+        return <InsertLabelNamesPopup
+          isUpdate={true}
+        />;
+      case PopupWindowType.EXIT_PROJECT:
+        return <ExitProjectPopup />;
+      case PopupWindowType.IMPORT_IMAGES:
+        return <LoadMoreImagesPopup />;
+      case PopupWindowType.LOAD_AI_MODEL:
+        return <LoadModelPopup />;
+      case PopupWindowType.DIRECTORY:
+        return <DirectoryPopup />;
+      case PopupWindowType.SUGGEST_LABEL_NAMES:
+        return <SuggestLabelNamesPopup />;
+      case PopupWindowType.LOADER:
+        return <ClipLoader
+          size={50}
+          color={CSSHelper.getLeadingColor()}
+          loading={true}
+        />;
+      default:
+        return null;
+    }
+  };
 
-    return (
-        activePopupType && <div className='PopupView'>
-            {selectPopup()}
-        </div>
-    );
+  return (
+    activePopupType && <div className='PopupView'>
+      {selectPopup()}
+    </div>
+  );
 };
 
 const mapStateToProps = (state: AppState) => ({
-    activePopupType: state.general.activePopupType
+  activePopupType: state.general.activePopupType
 });
 
 export default connect(
-    mapStateToProps
+  mapStateToProps
 )(PopupView);

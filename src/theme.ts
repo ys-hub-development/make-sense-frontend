@@ -26,7 +26,8 @@ export const theme = createTheme({
       main: $secondary
     },
     text: {
-      primary: $darkThemeThirdColor
+      primary: $darkThemeThirdColor,
+      secondary: '#b6b1b1'
     }
   },
   components: {

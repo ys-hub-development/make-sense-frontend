@@ -125,7 +125,7 @@ export const DropDownMenuData: DropDownMenuNode[] = [
         getDisabled: (status) => status,
         onClick: () =>
           store.dispatch(
-            updateActivePopupType(PopupWindowType.EXPORT_ANNOTATIONS)
+            updateActivePopupType(PopupWindowType.EXPORT_ANNOTATIONS_DB)
           )
       },
       {
@@ -136,7 +136,7 @@ export const DropDownMenuData: DropDownMenuNode[] = [
         disabled: false,
         getDisabled: (status) => status,
         onClick: () =>
-          store.dispatch(updateActivePopupType(PopupWindowType.LOAD_AI_MODEL))
+          store.dispatch(updateActivePopupType(PopupWindowType.LOAD_AI_MODEL_DB))
       }
     ]
   },

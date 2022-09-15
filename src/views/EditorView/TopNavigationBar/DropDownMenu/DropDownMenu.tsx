@@ -106,7 +106,6 @@ const DropDownMenu: React.FC<IProps> = ({ updatePreventCustomCursorStatusAction,
       if (!isHasImages) {
         return true;
       }
-      console.log(imageActionType);
       return item.actionType !== imageActionType;
     }
     return false;

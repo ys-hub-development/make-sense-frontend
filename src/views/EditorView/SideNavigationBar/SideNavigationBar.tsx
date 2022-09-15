@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 import './SideNavigationBar.scss';
-import {Direction} from "../../../data/enums/Direction";
+import {Direction} from '../../../data/enums/Direction';
 
 interface IProps {
     direction: Direction
     isOpen: boolean;
     isWithContext?: boolean;
-    renderCompanion?: () => any;
-    renderContent?: () => any;
+    renderCompanion?: () => ReactNode;
+    renderContent?: () => ReactNode;
 }
 
 export const SideNavigationBar: React.FC<IProps> = (props) => {
@@ -16,22 +16,22 @@ export const SideNavigationBar: React.FC<IProps> = (props) => {
 
     const getClassName = () => {
         return classNames(
-            "SideNavigationBar",
+            'SideNavigationBar',
             {
-                "left": direction === Direction.LEFT,
-                "right": direction === Direction.RIGHT,
-                "with-context": isWithContext,
-                "closed": !isOpen
+                'left': direction === Direction.LEFT,
+                'right': direction === Direction.RIGHT,
+                'with-context': isWithContext,
+                'closed': !isOpen
             }
         );
     };
 
     return (
         <div className={getClassName()}>
-            <div className="CompanionBar">
+            <div className='CompanionBar'>
                 {renderCompanion && renderCompanion()}
             </div>
-            {isOpen && <div className="NavigationBarContentWrapper">
+            {isOpen && <div className='NavigationBarContentWrapper'>
                 {renderContent && renderContent()}
             </div>}
         </div>

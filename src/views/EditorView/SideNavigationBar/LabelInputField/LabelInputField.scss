@@ -38,13 +38,17 @@
 
       .ContentWrapper {
         align-self: stretch;
-
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
         justify-content: center;
         align-items: center;
         align-content: center;
+
+        .ImageButton {
+          margin-left: 0;
+          margin-right: 0;
+        }
       }
 
       .DropdownLabel {

@@ -1,54 +1,55 @@
-import React from "react";
-import { ISize } from "../../../../interfaces/ISize";
-import Scrollbars from "react-custom-scrollbars-2";
-import {
-  ImageData,
-  LabelName,
-  LabelRect,
-} from "../../../../store/labels/types";
-import "./RectLabelsList.scss";
+import React from 'react';
+import { ISize } from '../../../../interfaces/ISize';
+import Scrollbars from 'react-custom-scrollbars-2';
+import { ImageData, LabelName, LabelRect } from '../../../../store/labels/types';
+import './RectLabelsList.scss';
 import {
   updateActiveLabelId,
   updateActiveLabelNameId,
-  updateImageDataById,
-} from "../../../../store/labels/actionCreators";
-import { AppState } from "../../../../store";
-import { connect } from "react-redux";
-import LabelInputField from "../LabelInputField/LabelInputField";
-import EmptyLabelList from "../EmptyLabelList/EmptyLabelList";
-import { LabelActions } from "../../../../logic/actions/LabelActions";
-import { LabelStatus } from "../../../../data/enums/LabelStatus";
-import { findLast } from "lodash";
+  updateImageDataById
+} from '../../../../store/labels/actionCreators';
+import { AppState } from '../../../../store';
+import { connect } from 'react-redux';
+import LabelInputField from '../LabelInputField/LabelInputField';
+import EmptyLabelList from '../EmptyLabelList/EmptyLabelList';
+import { LabelActions } from '../../../../logic/actions/LabelActions';
+import { LabelStatus } from '../../../../data/enums/LabelStatus';
+import { findLast } from 'lodash';
+import { updateActivePopupType } from '../../../../store/general/actionCreators';
+import { PopupWindowType } from '../../../../data/enums/PopupWindowType';
 
 interface IProps {
   size: ISize;
   imageData: ImageData;
-  updateImageDataByIdAction: (id: string, newImageData: ImageData) => any;
+  updateImageDataByIdAction: (id: string, newImageData: ImageData) => void;
   activeLabelId: string;
   highlightedLabelId: string;
-  updateActiveLabelNameIdAction: (activeLabelId: string) => any;
+  updateActiveLabelNameIdAction: (activeLabelId: string) => void;
   labelNames: LabelName[];
-  updateActiveLabelIdAction: (activeLabelId: string) => any;
+  updateActiveLabelIdAction: (activeLabelId: string) => void;
+  changeActivePopupType: (type: PopupWindowType) => void;
 }
 
-const RectLabelsList: React.FC<IProps> = ({
-  size,
-  imageData,
-  updateImageDataByIdAction,
-  labelNames,
-  updateActiveLabelNameIdAction,
-  activeLabelId,
-  highlightedLabelId,
-  updateActiveLabelIdAction,
-}) => {
+const RectLabelsList: React.FC<IProps> = (
+  {
+    size,
+    imageData,
+    updateImageDataByIdAction,
+    labelNames,
+    updateActiveLabelNameIdAction,
+    activeLabelId,
+    highlightedLabelId,
+    updateActiveLabelIdAction,
+    changeActivePopupType
+  }) => {
   const labelInputFieldHeight = 40;
   const listStyle: React.CSSProperties = {
     width: size.width,
-    height: size.height,
+    height: size.height
   };
   const listStyleContent: React.CSSProperties = {
     width: size.width,
-    height: (imageData?.labelRects?.length || 1)  * labelInputFieldHeight,
+    height: (imageData?.labelRects?.length || 1) * labelInputFieldHeight
   };
 
   const deleteRectLabelById = (labelRectId: string) => {
@@ -67,12 +68,12 @@ const RectLabelsList: React.FC<IProps> = ({
           return {
             ...labelRect,
             labelId: labelNameId,
-            status: LabelStatus.ACCEPTED,
+            status: LabelStatus.ACCEPTED
           };
         } else {
           return labelRect;
         }
-      }),
+      })
     };
     updateImageDataByIdAction(imageData.id, newImageData);
     updateActiveLabelNameIdAction(labelNameId);
@@ -80,6 +81,11 @@ const RectLabelsList: React.FC<IProps> = ({
 
   const onClickHandler = () => {
     updateActiveLabelIdAction(null);
+  };
+
+  const onEdit = (id: string) => {
+    changeActivePopupType(PopupWindowType.UPDATE_LABEL_ITEM);
+    updateActiveLabelNameIdAction(id);
   };
 
   const getChildren = () => {
@@ -92,8 +98,9 @@ const RectLabelsList: React.FC<IProps> = ({
           <LabelInputField
             size={{
               width: size.width,
-              height: labelInputFieldHeight,
+              height: labelInputFieldHeight
             }}
+            onEdit={() => onEdit(labelRect.labelId)}
             isActive={labelRect.id === activeLabelId}
             isHighlighted={labelRect.id === highlightedLabelId}
             isVisible={labelRect.isVisible}
@@ -115,20 +122,20 @@ const RectLabelsList: React.FC<IProps> = ({
 
   return (
     <div
-      className="RectLabelsList"
+      className='RectLabelsList'
       style={listStyle}
-      onClickCapture={onClickHandler}
+      // onClickCapture={onClickHandler}
     >
       {imageData?.labelRects?.filter(
         (labelRect: LabelRect) => labelRect.status === LabelStatus.ACCEPTED
       ).length === 0 ? (
         <EmptyLabelList
-          labelBefore={"draw your first bounding box"}
-          labelAfter={"no labels created for this image yet"}
+          labelBefore={'draw your first bounding box'}
+          labelAfter={'no labels created for this image yet'}
         />
       ) : (
         <Scrollbars>
-          <div className="RectLabelsListContent" style={listStyleContent}>
+          <div className='RectLabelsListContent' style={listStyleContent}>
             {getChildren()}
           </div>
         </Scrollbars>
@@ -141,12 +148,13 @@ const mapDispatchToProps = {
   updateImageDataByIdAction: updateImageDataById,
   updateActiveLabelNameIdAction: updateActiveLabelNameId,
   updateActiveLabelIdAction: updateActiveLabelId,
+  changeActivePopupType: updateActivePopupType
 };
 
 const mapStateToProps = (state: AppState) => ({
   activeLabelId: state.labels.activeLabelId,
   highlightedLabelId: state.labels.highlightedLabelId,
-  labelNames: state.labels.labels,
+  labelNames: state.labels.labels
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RectLabelsList);

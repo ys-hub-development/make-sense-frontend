@@ -7,13 +7,14 @@ import LoadLabelsPopup from './LoadLabelNamesPopup/LoadLabelNamesPopup';
 import InsertLabelNamesPopup from './InsertLabelNamesPopup/InsertLabelNamesPopup';
 import ExitProjectPopup from './ExitProjectPopup/ExitProjectPopup';
 import LoadMoreImagesPopup from './LoadMoreImagesPopup/LoadMoreImagesPopup';
-import { LoadModelPopup } from './LoadModelPopup/LoadModelPopup';
+import LoadModelPopup from './LoadModelPopup/LoadModelPopup';
 import SuggestLabelNamesPopup from './SuggestLabelNamesPopup/SuggestLabelNamesPopup';
 import { CSSHelper } from '../../logic/helpers/CSSHelper';
 import { ClipLoader } from 'react-spinners';
 import ImportLabelPopup from './ImportLabelPopup/ImportLabelPopup';
 import ExportLabelPopup from './ExportLabelsPopup/ExportLabelPopup';
 import DirectoryPopup from './DirectoryPopup/DirectoryPopup';
+import ExportLabelsDbPopup from './ExportLabelsDbPopup/ExportLabelsDbPopup';
 
 interface IProps {
   activePopupType: PopupWindowType;
@@ -27,6 +28,8 @@ const PopupView: React.FC<IProps> = ({ activePopupType }) => {
         return <LoadLabelsPopup />;
       case PopupWindowType.EXPORT_ANNOTATIONS:
         return <ExportLabelPopup />;
+      case PopupWindowType.EXPORT_ANNOTATIONS_DB:
+        return <ExportLabelsDbPopup />;
       case PopupWindowType.IMPORT_ANNOTATIONS:
         return <ImportLabelPopup />;
       case PopupWindowType.INSERT_LABEL_NAMES:
@@ -37,11 +40,15 @@ const PopupView: React.FC<IProps> = ({ activePopupType }) => {
         return <InsertLabelNamesPopup
           isUpdate={true}
         />;
+      case PopupWindowType.UPDATE_LABEL_ITEM:
+        return <InsertLabelNamesPopup isUpdate={true} isUpdateItem={true} />;
       case PopupWindowType.EXIT_PROJECT:
         return <ExitProjectPopup />;
       case PopupWindowType.IMPORT_IMAGES:
         return <LoadMoreImagesPopup />;
       case PopupWindowType.LOAD_AI_MODEL:
+        return <LoadModelPopup />;
+      case PopupWindowType.LOAD_AI_MODEL_DB:
         return <LoadModelPopup />;
       case PopupWindowType.DIRECTORY:
         return <DirectoryPopup />;

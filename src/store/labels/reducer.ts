@@ -61,12 +61,6 @@ export function labelsReducer(
                 imagesData: state.imagesData.concat(action.payload.imageData)
             }
         }
-        case Action.ADD_IMAGES_DATA_FROM_DB: {
-            return {
-                ...state,
-                imagesData: action.payload.imageData
-            }
-        }
         case Action.UPDATE_IMAGES_DATA: {
             return {
                 ...state,

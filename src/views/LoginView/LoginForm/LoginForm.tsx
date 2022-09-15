@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Grid, TextField } from '@mui/material';
+import { Box, Button, CircularProgress, Grid, Stack, TextField } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -51,7 +51,17 @@ export const LoginForm = () => {
 
   return (
     <form className='LoginForm' onSubmit={form.handleSubmit(onSubmit)}>
-      <h2>Sign in</h2>
+      <Stack direction='row' justifyContent='space-between'>
+        <h2>Sign in</h2>
+        <Box width='130px' className='company-logo'>
+          <img
+            draggable={false}
+            alt={'main-logo'}
+            src={'ico/k_data_lab.png'}
+          />
+        </Box>
+      </Stack>
+
       <Grid container={true} rowSpacing={2}>
         <Grid item={true} xs={12}>
           <Controller

@@ -36,6 +36,7 @@ export type LabelLine = Annotation & {
 export type LabelName = {
   name: string;
   id: string;
+  description: string
   color?: string;
 }
 
@@ -57,7 +58,7 @@ export type ImageData = {
 }
 
 export type LabelsState = {
-  activeImageIndex: number;
+  activeImageIndex: number | null;
   activeLabelNameId: string;
   activeLabelType: LabelType;
   activeLabelId: string | null;

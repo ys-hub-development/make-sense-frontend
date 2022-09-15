@@ -1,33 +1,36 @@
-import React from "react";
-import { ISize } from "../../../../interfaces/ISize";
-import Scrollbars from "react-custom-scrollbars-2";
+import React from 'react';
+import { ISize } from '../../../../interfaces/ISize';
+import Scrollbars from 'react-custom-scrollbars-2';
 import {
   ImageData,
   LabelName,
   LabelPolygon,
-} from "../../../../store/labels/types";
-import "./PolygonLabelsList.scss";
+} from '../../../../store/labels/types';
+import './PolygonLabelsList.scss';
 import {
   updateActiveLabelId,
   updateActiveLabelNameId,
   updateImageDataById,
-} from "../../../../store/labels/actionCreators";
-import { AppState } from "../../../../store";
-import { connect } from "react-redux";
-import LabelInputField from "../LabelInputField/LabelInputField";
-import EmptyLabelList from "../EmptyLabelList/EmptyLabelList";
-import { LabelActions } from "../../../../logic/actions/LabelActions";
-import { findLast } from "lodash";
+} from '../../../../store/labels/actionCreators';
+import { AppState } from '../../../../store';
+import { connect } from 'react-redux';
+import LabelInputField from '../LabelInputField/LabelInputField';
+import EmptyLabelList from '../EmptyLabelList/EmptyLabelList';
+import { LabelActions } from '../../../../logic/actions/LabelActions';
+import { findLast } from 'lodash';
+import { updateActivePopupType } from '../../../../store/general/actionCreators';
+import { PopupWindowType } from '../../../../data/enums/PopupWindowType';
 
 interface IProps {
   size: ISize;
   imageData: ImageData;
-  updateImageDataByIdAction: (id: string, newImageData: ImageData) => any;
+  updateImageDataByIdAction: (id: string, newImageData: ImageData) => void;
   activeLabelId: string;
   highlightedLabelId: string;
-  updateActiveLabelNameIdAction: (activeLabelId: string) => any;
+  updateActiveLabelNameIdAction: (activeLabelId: string) => void;
   labelNames: LabelName[];
-  updateActiveLabelIdAction: (activeLabelId: string) => any;
+  updateActiveLabelIdAction: (activeLabelId: string) => void;
+  changeActivePopupType: (type: PopupWindowType) => void;
 }
 
 const PolygonLabelsList: React.FC<IProps> = ({
@@ -39,6 +42,7 @@ const PolygonLabelsList: React.FC<IProps> = ({
   activeLabelId,
   highlightedLabelId,
   updateActiveLabelIdAction,
+  changeActivePopupType
 }) => {
   const labelInputFieldHeight = 40;
   const listStyle: React.CSSProperties = {
@@ -77,8 +81,13 @@ const PolygonLabelsList: React.FC<IProps> = ({
     updateActiveLabelNameIdAction(labelNameId);
   };
 
-  const onClickHandler = () => {
-    updateActiveLabelIdAction(null);
+  // const onClickHandler = () => {
+  //   updateActiveLabelIdAction(null);
+  // };
+
+  const onEdit = (id: string) => {
+    changeActivePopupType(PopupWindowType.UPDATE_LABEL_ITEM);
+    updateActiveLabelNameIdAction(id);
   };
 
   const getChildren = () => {
@@ -89,6 +98,7 @@ const PolygonLabelsList: React.FC<IProps> = ({
             width: size.width,
             height: labelInputFieldHeight,
           }}
+          onEdit={() => onEdit(labelPolygon.labelId)}
           isActive={labelPolygon.id === activeLabelId}
           isHighlighted={labelPolygon.id === highlightedLabelId}
           isVisible={labelPolygon.isVisible}
@@ -110,18 +120,18 @@ const PolygonLabelsList: React.FC<IProps> = ({
 
   return (
     <div
-      className="PolygonLabelsList"
+      className='PolygonLabelsList'
       style={listStyle}
-      onClickCapture={onClickHandler}
+      // onClickCapture={onClickHandler}
     >
       {imageData?.labelPolygons?.length === 0 ? (
         <EmptyLabelList
-          labelBefore={"draw your first polygon"}
-          labelAfter={"no labels created for this image yet"}
+          labelBefore={'draw your first polygon'}
+          labelAfter={'no labels created for this image yet'}
         />
       ) : (
         <Scrollbars>
-          <div className="PolygonLabelsListContent" style={listStyleContent}>
+          <div className='PolygonLabelsListContent' style={listStyleContent}>
             {getChildren()}
           </div>
         </Scrollbars>
@@ -134,6 +144,7 @@ const mapDispatchToProps = {
   updateImageDataByIdAction: updateImageDataById,
   updateActiveLabelNameIdAction: updateActiveLabelNameId,
   updateActiveLabelIdAction: updateActiveLabelId,
+  changeActivePopupType: updateActivePopupType
 };
 
 const mapStateToProps = (state: AppState) => ({

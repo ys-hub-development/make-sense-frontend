@@ -28,6 +28,7 @@ import { RenderEngineUtil } from '../../../utils/RenderEngineUtil';
 import { LabelStatus } from '../../../data/enums/LabelStatus';
 import { isEqual } from 'lodash';
 import { AIActions } from '../../../logic/actions/AIActions';
+import { Stack, Typography } from '@mui/material';
 
 interface IProps {
   size: ISize;
@@ -39,6 +40,8 @@ interface IProps {
   customCursorStyle: CustomCursorStyle;
   imageDragMode: boolean;
   zoom: number;
+  activeImageIndex: number | null,
+  imagesLength: number
 }
 
 interface IState {
@@ -51,8 +54,8 @@ class Editor extends React.Component<IProps, IState> {
     this.state = {
       viewPortSize: {
         width: 0,
-        height: 0,
-      },
+        height: 0
+      }
     };
   }
 
@@ -151,7 +154,8 @@ class Editor extends React.Component<IProps, IState> {
     this.updateModelAndRender();
   };
 
-  private handleLoadImageError = () => {};
+  private handleLoadImageError = () => {
+  };
 
   // =================================================================================================================
   // HELPER METHODS
@@ -174,11 +178,11 @@ class Editor extends React.Component<IProps, IState> {
       EditorModel.viewPortHelper.update(editorData);
     } else {
       EditorModel.supportRenderingEngine &&
-        EditorModel.supportRenderingEngine.update(editorData);
+      EditorModel.supportRenderingEngine.update(editorData);
     }
 
     !this.props.activePopupType &&
-      EditorActions.updateMousePositionIndicator(event);
+    EditorActions.updateMousePositionIndicator(event);
     EditorActions.fullRender();
   };
 
@@ -214,7 +218,7 @@ class Editor extends React.Component<IProps, IState> {
           .map((labelRect: LabelRect) => {
             const positionOnImage: IPoint = {
               x: labelRect.rect.x,
-              y: labelRect.rect.y,
+              y: labelRect.rect.y
             };
             const positionOnViewPort: IPoint =
               RenderEngineUtil.transferPointFromImageToViewPortContent(
@@ -243,7 +247,7 @@ class Editor extends React.Component<IProps, IState> {
         .map((labelPoint: LabelPoint) => {
           const positionOnImage: IPoint = {
             x: labelPoint.point.x,
-            y: labelPoint.point.y,
+            y: labelPoint.point.y
           };
           const positionOnViewPort: IPoint =
             RenderEngineUtil.transferPointFromImageToViewPortContent(
@@ -265,7 +269,7 @@ class Editor extends React.Component<IProps, IState> {
   private onScrollbarsUpdate = (scrollbarContent) => {
     const newViewPortContentSize = {
       width: scrollbarContent.scrollWidth,
-      height: scrollbarContent.scrollHeight,
+      height: scrollbarContent.scrollHeight
     };
     if (!isEqual(newViewPortContentSize, this.state.viewPortSize)) {
       this.setState({ viewPortSize: newViewPortContentSize });
@@ -273,6 +277,7 @@ class Editor extends React.Component<IProps, IState> {
   };
 
   public render() {
+    const { activeImageIndex, imagesLength } = this.props;
     return (
       <div
         className='Editor'
@@ -289,7 +294,9 @@ class Editor extends React.Component<IProps, IState> {
           )}
           onUpdate={this.onScrollbarsUpdate}
         >
-          <div className='ViewPortContent'>
+          <div
+            className='ViewPortContent'
+            style={{ height: EditorModel?.canvas?.height ? `${EditorModel?.canvas?.height}px` : 0 }}>
             <canvas
               className='ImageCanvas'
               ref={(ref) => (EditorModel.canvas = ref)}
@@ -299,6 +306,20 @@ class Editor extends React.Component<IProps, IState> {
               }
             />
             {this.getOptionsPanels()}
+            {
+              !imagesLength && (
+                <div className='NoImageWrapper'>
+                  <div className='content'>
+                    <Stack alignItems='center'>
+                      <img src='/ico/no-image.webp' alt='no-image' />
+                      <Typography fontWeight={600} variant='h5' sx={{ color: '#fff', opacity: .7 }}>
+                        Please import the image to continue the process
+                      </Typography>
+                    </Stack>
+                  </div>
+                </div>
+              )
+            }
           </div>
         </Scrollbars>
         <div
@@ -323,7 +344,7 @@ class Editor extends React.Component<IProps, IState> {
 }
 
 const mapDispatchToProps = {
-  updateImageDataById,
+  updateImageDataById
 };
 
 const mapStateToProps = (state: AppState) => ({
@@ -333,6 +354,8 @@ const mapStateToProps = (state: AppState) => ({
   customCursorStyle: state.general.customCursorStyle,
   imageDragMode: state.general.imageDragMode,
   zoom: state.general.zoom,
+  activeImageIndex: state.labels.activeImageIndex,
+  imagesLength: state.labels.imagesData.length
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

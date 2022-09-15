@@ -1,53 +1,53 @@
-import React from "react";
-import "./LineLabelsList.scss";
-import { ISize } from "../../../../interfaces/ISize";
-import {
-  ImageData,
-  LabelLine,
-  LabelName,
-} from "../../../../store/labels/types";
-import { LabelActions } from "../../../../logic/actions/LabelActions";
-import LabelInputField from "../LabelInputField/LabelInputField";
-import { findLast } from "lodash";
-import EmptyLabelList from "../EmptyLabelList/EmptyLabelList";
-import Scrollbars from "react-custom-scrollbars-2";
+import React from 'react';
+import './LineLabelsList.scss';
+import { ISize } from '../../../../interfaces/ISize';
+import { ImageData, LabelLine, LabelName } from '../../../../store/labels/types';
+import { LabelActions } from '../../../../logic/actions/LabelActions';
+import LabelInputField from '../LabelInputField/LabelInputField';
+import { findLast } from 'lodash';
+import EmptyLabelList from '../EmptyLabelList/EmptyLabelList';
+import Scrollbars from 'react-custom-scrollbars-2';
 import {
   updateActiveLabelId,
   updateActiveLabelNameId,
-  updateImageDataById,
-} from "../../../../store/labels/actionCreators";
-import { AppState } from "../../../../store";
-import { connect } from "react-redux";
+  updateImageDataById
+} from '../../../../store/labels/actionCreators';
+import { AppState } from '../../../../store';
+import { connect } from 'react-redux';
+import { PopupWindowType } from '../../../../data/enums/PopupWindowType';
+import { updateActivePopupType } from '../../../../store/general/actionCreators';
 
 interface IProps {
   size: ISize;
   imageData: ImageData;
-  updateImageDataByIdAction: (id: string, newImageData: ImageData) => any;
+  updateImageDataByIdAction: (id: string, newImageData: ImageData) => void;
   activeLabelId: string;
   highlightedLabelId: string;
-  updateActiveLabelNameIdAction: (activeLabelId: string) => any;
+  updateActiveLabelNameIdAction: (activeLabelId: string) => void;
   labelNames: LabelName[];
-  updateActiveLabelIdAction: (activeLabelId: string) => any;
+  updateActiveLabelIdAction: (activeLabelId: string) => void;
+  changeActivePopupType: (type: PopupWindowType) => void;
 }
 
-const LineLabelsList: React.FC<IProps> = ({
-  size,
-  imageData,
-  updateImageDataByIdAction,
-  labelNames,
-  updateActiveLabelNameIdAction,
-  activeLabelId,
-  highlightedLabelId,
-  updateActiveLabelIdAction,
-}) => {
+const LineLabelsList: React.FC<IProps> = (
+  {
+    size,
+    imageData,
+    updateImageDataByIdAction,
+    labelNames,
+    updateActiveLabelNameIdAction,
+    activeLabelId,
+    highlightedLabelId,
+    changeActivePopupType
+  }) => {
   const labelInputFieldHeight = 40;
   const listStyle: React.CSSProperties = {
     width: size.width,
-    height: size.height,
+    height: size.height
   };
   const listStyleContent: React.CSSProperties = {
     width: size.width,
-    height: (imageData?.labelLines?.length || 1) * labelInputFieldHeight,
+    height: (imageData?.labelLines?.length || 1) * labelInputFieldHeight
   };
 
   const deleteLineLabelById = (labelLineId: string) => {
@@ -65,18 +65,23 @@ const LineLabelsList: React.FC<IProps> = ({
         if (labelLine.id === labelLineId) {
           return {
             ...labelLine,
-            labelId: labelNameId,
+            labelId: labelNameId
           };
         }
         return labelLine;
-      }),
+      })
     };
     updateImageDataByIdAction(imageData.id, newImageData);
     updateActiveLabelNameIdAction(labelNameId);
   };
 
-  const onClickHandler = () => {
-    updateActiveLabelIdAction(null);
+  // const onClickHandler = () => {
+  //   updateActiveLabelIdAction(null);
+  // };
+
+  const onEdit = (id: string) => {
+    changeActivePopupType(PopupWindowType.UPDATE_LABEL_ITEM);
+    updateActiveLabelNameIdAction(id);
   };
 
   const getChildren = () => {
@@ -85,8 +90,9 @@ const LineLabelsList: React.FC<IProps> = ({
         <LabelInputField
           size={{
             width: size.width,
-            height: labelInputFieldHeight,
+            height: labelInputFieldHeight
           }}
+          onEdit={() => onEdit(labelLine.labelId)}
           isActive={labelLine.id === activeLabelId}
           isHighlighted={labelLine.id === highlightedLabelId}
           isVisible={labelLine.isVisible}
@@ -108,18 +114,18 @@ const LineLabelsList: React.FC<IProps> = ({
 
   return (
     <div
-      className="LineLabelsList"
+      className='LineLabelsList'
       style={listStyle}
-      onClickCapture={onClickHandler}
+      // onClickCapture={onClickHandler}
     >
       {!imageData?.labelLines ? (
         <EmptyLabelList
-          labelBefore={"draw your first line"}
-          labelAfter={"no labels created for this image yet"}
+          labelBefore={'draw your first line'}
+          labelAfter={'no labels created for this image yet'}
         />
       ) : (
         <Scrollbars>
-          <div className="LineLabelsListContent" style={listStyleContent}>
+          <div className='LineLabelsListContent' style={listStyleContent}>
             {getChildren()}
           </div>
         </Scrollbars>
@@ -132,12 +138,13 @@ const mapDispatchToProps = {
   updateImageDataByIdAction: updateImageDataById,
   updateActiveLabelNameIdAction: updateActiveLabelNameId,
   updateActiveLabelIdAction: updateActiveLabelId,
+  changeActivePopupType: updateActivePopupType
 };
 
 const mapStateToProps = (state: AppState) => ({
   activeLabelId: state.labels.activeLabelId,
   highlightedLabelId: state.labels.highlightedLabelId,
-  labelNames: state.labels.labels,
+  labelNames: state.labels.labels
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LineLabelsList);

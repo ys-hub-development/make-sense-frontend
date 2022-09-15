@@ -26,7 +26,7 @@ export const theme = createTheme({
       main: $secondary
     },
     text: {
-      primary: $darkThemeThirdColor,
+      primary: '#fff',
       secondary: '#b6b1b1'
     }
   },
@@ -59,11 +59,7 @@ export const theme = createTheme({
       }
     },
     MuiInputLabel: {
-      styleOverrides: {
-        root: {
-          color: $darkThemeThirdColor
-        }
-      }
+      styleOverrides: {}
     },
     MuiTextField: {
       defaultProps: {
@@ -71,6 +67,12 @@ export const theme = createTheme({
       },
       styleOverrides: {
         root: {
+          '& .MuiInput-underline:before': {
+            borderBottomColor: 'white'
+          },
+          '& .MuiInput-underline:hover:before': {
+            borderBottomColor: 'white'
+          },
           '&:hover::before': {
             borderColor: $darkThemeThirdColor
           },
@@ -81,5 +83,8 @@ export const theme = createTheme({
         }
       }
     }
+  },
+  typography: {
+    fontFamily: '"Saira Semi Condensed", sans-serif'
   }
 });

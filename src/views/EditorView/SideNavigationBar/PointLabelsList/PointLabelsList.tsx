@@ -1,54 +1,55 @@
-import React from "react";
-import { ISize } from "../../../../interfaces/ISize";
-import Scrollbars from "react-custom-scrollbars-2";
-import {
-  ImageData,
-  LabelName,
-  LabelPoint,
-} from "../../../../store/labels/types";
-import "./PointLabelsList.scss";
+import React from 'react';
+import { ISize } from '../../../../interfaces/ISize';
+import Scrollbars from 'react-custom-scrollbars-2';
+import { ImageData, LabelName, LabelPoint } from '../../../../store/labels/types';
+import './PointLabelsList.scss';
 import {
   updateActiveLabelId,
   updateActiveLabelNameId,
-  updateImageDataById,
-} from "../../../../store/labels/actionCreators";
-import { AppState } from "../../../../store";
-import { connect } from "react-redux";
-import LabelInputField from "../LabelInputField/LabelInputField";
-import EmptyLabelList from "../EmptyLabelList/EmptyLabelList";
-import { LabelActions } from "../../../../logic/actions/LabelActions";
-import { findLast } from "lodash";
-import { LabelStatus } from "../../../../data/enums/LabelStatus";
+  updateImageDataById
+} from '../../../../store/labels/actionCreators';
+import { AppState } from '../../../../store';
+import { connect } from 'react-redux';
+import LabelInputField from '../LabelInputField/LabelInputField';
+import EmptyLabelList from '../EmptyLabelList/EmptyLabelList';
+import { LabelActions } from '../../../../logic/actions/LabelActions';
+import { findLast } from 'lodash';
+import { LabelStatus } from '../../../../data/enums/LabelStatus';
+import { PopupWindowType } from '../../../../data/enums/PopupWindowType';
+import { updateActivePopupType } from '../../../../store/general/actionCreators';
 
 interface IProps {
   size: ISize;
   imageData: ImageData;
-  updateImageDataByIdAction: (id: string, newImageData: ImageData) => any;
+  updateImageDataByIdAction: (id: string, newImageData: ImageData) => void;
   activeLabelId: string;
   highlightedLabelId: string;
-  updateActiveLabelNameIdAction: (activeLabelId: string) => any;
+  updateActiveLabelNameIdAction: (activeLabelId: string) => void;
   labelNames: LabelName[];
-  updateActiveLabelIdAction: (activeLabelId: string) => any;
+  updateActiveLabelIdAction: (activeLabelId: string) => void;
+  changeActivePopupType: (type: PopupWindowType) => void;
 }
 
-const PointLabelsList: React.FC<IProps> = ({
-  size,
-  imageData,
-  updateImageDataByIdAction,
-  labelNames,
-  updateActiveLabelNameIdAction,
-  activeLabelId,
-  highlightedLabelId,
-  updateActiveLabelIdAction,
-}) => {
+const PointLabelsList: React.FC<IProps> = (
+  {
+    size,
+    imageData,
+    updateImageDataByIdAction,
+    labelNames,
+    updateActiveLabelNameIdAction,
+    activeLabelId,
+    highlightedLabelId,
+    updateActiveLabelIdAction,
+    changeActivePopupType
+  }) => {
   const labelInputFieldHeight = 40;
   const listStyle: React.CSSProperties = {
     width: size.width,
-    height: size.height,
+    height: size.height
   };
   const listStyleContent: React.CSSProperties = {
     width: size.width,
-    height: (imageData?.labelPoints?.length || 1) * labelInputFieldHeight,
+    height: (imageData?.labelPoints?.length || 1) * labelInputFieldHeight
   };
 
   const deletePointLabelById = (labelPointId: string) => {
@@ -66,18 +67,23 @@ const PointLabelsList: React.FC<IProps> = ({
         if (labelPoint.id === labelPointId) {
           return {
             ...labelPoint,
-            labelId: labelNameId,
+            labelId: labelNameId
           };
         }
         return labelPoint;
-      }),
+      })
     };
     updateImageDataByIdAction(imageData.id, newImageData);
     updateActiveLabelNameIdAction(labelNameId);
   };
 
-  const onClickHandler = () => {
-    updateActiveLabelIdAction(null);
+  // const onClickHandler = () => {
+  //   updateActiveLabelIdAction(null);
+  // };
+
+  const onEdit = (id: string) => {
+    changeActivePopupType(PopupWindowType.UPDATE_LABEL_ITEM);
+    updateActiveLabelNameIdAction(id);
   };
 
   const getChildren = () => {
@@ -90,8 +96,9 @@ const PointLabelsList: React.FC<IProps> = ({
           <LabelInputField
             size={{
               width: size.width,
-              height: labelInputFieldHeight,
+              height: labelInputFieldHeight
             }}
+            onEdit={() => onEdit(labelPoint.labelId)}
             isActive={labelPoint.id === activeLabelId}
             isHighlighted={labelPoint.id === highlightedLabelId}
             isVisible={labelPoint.isVisible}
@@ -113,20 +120,20 @@ const PointLabelsList: React.FC<IProps> = ({
 
   return (
     <div
-      className="PointLabelsList"
+      className='PointLabelsList'
       style={listStyle}
-      onClickCapture={onClickHandler}
+      // onClickCapture={onClickHandler}
     >
       {imageData?.labelPoints?.filter(
         (labelPoint: LabelPoint) => labelPoint.status === LabelStatus.ACCEPTED
       ).length === 0 ? (
         <EmptyLabelList
-          labelBefore={"mark your first point"}
-          labelAfter={"no labels created for this image yet"}
+          labelBefore={'mark your first point'}
+          labelAfter={'no labels created for this image yet'}
         />
       ) : (
         <Scrollbars>
-          <div className="PointLabelsListContent" style={listStyleContent}>
+          <div className='PointLabelsListContent' style={listStyleContent}>
             {getChildren()}
           </div>
         </Scrollbars>
@@ -139,12 +146,13 @@ const mapDispatchToProps = {
   updateImageDataByIdAction: updateImageDataById,
   updateActiveLabelNameIdAction: updateActiveLabelNameId,
   updateActiveLabelIdAction: updateActiveLabelId,
+  changeActivePopupType: updateActivePopupType
 };
 
 const mapStateToProps = (state: AppState) => ({
   activeLabelId: state.labels.activeLabelId,
   highlightedLabelId: state.labels.highlightedLabelId,
-  labelNames: state.labels.labels,
+  labelNames: state.labels.labels
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PointLabelsList);
